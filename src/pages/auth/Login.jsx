@@ -1,11 +1,8 @@
-import React from 'react'
-import Form from './components/form/Form'
+import React from "react";
+import Form from "./components/form/Form";
 
 const Login = () => {
-  return (
-   
-  <Form type='Login' />
-  )
-}
+  return <Form type="login" />;
+};
 
-export default Login
+export default Login;

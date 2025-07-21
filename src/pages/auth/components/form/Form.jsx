@@ -1,47 +1,124 @@
-import React from 'react'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const Form = ({type}) => {
+const Form = ({ type, onSubmit }) => {
+  const [data, setData] = useState({
+    email: "",
+    username: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(data);
+  };
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-    <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div
-            className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        className="w-[90%] max-w-lg p-6 bg-white rounded-xl shadow-md space-y-6"
+        onSubmit={handleSubmit}
+      >
+        <h1 className="text-5xl">
+          {type === "login"
+            ? "Loin Here to Continue..."
+            : "Register Here to Continue..."}
+        </h1>
+        {/* Email */}
+        <div className="relative z-0 w-full group">
+          <input
+            type="email"
+            name="email"
+            onChange={handleChange}
+            id="email"
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            required
+          />
+          <label
+            htmlFor="email"
+            className="absolute text-lg text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-blue-600"
+          >
+            Email
+          </label>
         </div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-            <div className="max-w-md mx-auto">
-                <div>
-                    <h1 className="text-2xl font-semibold">
-                        { type === 'Login' ? 'Login here to continue...' : 'Register here to continue...' }
-                    </h1>
-                </div>
-                <div className="divide-y divide-gray-200">
-                    <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                        <div className="relative">
-                            <input autocomplete="off" id="email" name="email" type="text" className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Email address" />
-                            <label for="email" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email Address</label>
-                        </div>
-                   {
-                    type === 'Register' && (
-                        <div className="relative">
-                        <input autocomplete="off" id="username" name="username" type="text" className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="username address" />
-                        <label for="username" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Username</label>
-                    </div>
-                    )
-                   }
-                        <div className="relative">
-                            <input autocomplete="off" id="password" name="password" type="password" className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Password" />
-                            <label for="password" className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
-                        </div>
-                        <div className="relative">
-                            <button className="bg-blue-500 text-white rounded-md px-2 py-1">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-  )
-}
+        {type === "register" && (
+          <div className="relative z-0 w-full group">
+            <input
+              type="text"
+              name="username"
+              id="username"
+              onChange={handleChange}
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              placeholder=""
+              required
+            />
+            <label
+              htmlFor="username"
+              className="absolute text-lg text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-blue-600"
+            >
+              Username
+            </label>
+          </div>
+        )}
 
-export default Form
+        {/* Password */}
+        <div className="relative z-0 w-full group">
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handleChange}
+            className="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            required
+          />
+          <label
+            htmlFor="password"
+            className="absolute text-lg text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-blue-600"
+          >
+            Password
+          </label>
+        </div>
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Sign In
+        </button>
+        {/* <!-- Login Redirect --> */}
+        {type === "register" && (
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Already have an account?
+            <Link
+              to="/login"
+              className="text-blue-600 font-medium hover:underline"
+            >
+              Login
+            </Link>
+          </p>
+        )}
+        {/* <!-- Login Redirect --> */}
+        {type === "login" && (
+          <div className="text-center text-[#969696]">
+            Don&#x27;t have an account?
+            <Link
+              to="/register"
+              className="cursor-pointer text-[#7337FF] hover:underline"
+            >
+              Sign up
+            </Link>
+          </div>
+        )}
+      </form>
+    </div>
+  );
+};
+
+export default Form;
