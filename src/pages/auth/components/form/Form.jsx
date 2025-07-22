@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Form = ({ type, onSubmit, user }) => {
+const Form = ({ type, onSubmit }) => {
   const [data, setData] = useState({
     email: "",
     username: "",
@@ -24,8 +24,6 @@ const Form = ({ type, onSubmit, user }) => {
         className="w-[90%] max-w-lg p-6 bg-white rounded-xl shadow-md space-y-6"
         onSubmit={handleSubmit}
       >
-        <h2> {type === "login" && `Hello ${user?.username}`}</h2>
-
         <h1 className="text-5xl">
           {type === "login"
             ? "Loin Here to Continue..."

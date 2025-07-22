@@ -40,6 +40,7 @@ export function register(data) {
       dispatch(setStatus(STATUSES.ERROR));
     }
   };
+  v;
 }
 //login
 export function login(data) {

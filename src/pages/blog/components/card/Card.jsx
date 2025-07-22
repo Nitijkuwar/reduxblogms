@@ -1,32 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Card = () => {
+const Card = ({ blog }) => {
   return (
-    <Link to="/blog/id">
-      <div className="max-w-sm rounded overflow-hidden shadow-lg mb-4">
+    <Link
+      to={`/blog/${blog._id}`}
+      className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 mt-15"
+    >
+      <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+        {/* Image */}
         <img
-          className="w-full"
-          src="https://images.emojiterra.com/google/android-12l/512px/1f9d9-2642.png"
-          alt="Sunset in the mountains"
+          src={blog.imageUrl}
+          alt={blog.title}
+          className="w-full h-48 sm:h-56 md:h-64 object-cover"
         />
-        <div className="px-6 py-4">
-          <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
-          <p className="text-gray-700 text-base">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Voluptatibus quia, nulla! Maiores et perferendis eaque,
-            exercitationem praesentium nihil.
+
+        {/* Content */}
+        <div className="p-4 flex-1 flex flex-col">
+          <h2 className="font-bold text-xl text-gray-900 mb-2 line-clamp-2">
+            {blog.title}
+          </h2>
+          <p className="text-gray-700 text-sm flex-grow line-clamp-3">
+            {blog.description}
           </p>
         </div>
-        <div className="px-6 pt-4 pb-2">
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            #photography
-          </span>
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            #travel
-          </span>
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            #winter
+
+        {/* Category */}
+        <div className="px-4 pb-4">
+          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+            {blog.category}
           </span>
         </div>
       </div>

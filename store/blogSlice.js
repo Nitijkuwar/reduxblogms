@@ -20,7 +20,7 @@ const blogSlice = createSlice({
 export const { setStatus, setBlog } = blogSlice.actions;
 export default blogSlice.reducer;
 
-//register
+//addblog
 export function addBlog(data) {
   return async function addBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
@@ -48,9 +48,9 @@ export function fetchBlog(data) {
   return async function fetchBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
-      const response = await API.get("blog", data, {});
-      if (response.status === 201 && response?.data?.blog?.length > 0) {
-        dispatch(setStatus(STATUSES.data.blog));
+      const response = await API.get("blog", data);
+      if (response.status === 200 && response.data.data?.length > 0) {
+        dispatch(setBlog(response.data.data));
 
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
