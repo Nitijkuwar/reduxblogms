@@ -1,13 +1,13 @@
-import React from 'react'
-import Layout from '../../components/layout/Layout'
-import Form from './components/form/Form'
+import React from "react";
+import Layout from "../../components/layout/Layout";
+import Form from "./components/form/Form";
 
 const EditBlog = () => {
   return (
     <Layout>
-        <Form type='Edit' />
+      <Form type="Edit" />
     </Layout>
-  )
-}
+  );
+};
 
-export default EditBlog
+export default EditBlog;

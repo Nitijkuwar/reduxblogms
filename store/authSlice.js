@@ -49,8 +49,8 @@ export function login(data) {
     try {
       console.log(data);
       const response = await API.post("login", data);
-      if (response.status === 200 && response.data.token) {
-        dispatch(setToken(response?.data.token));
+      if (response.status === 200 && response?.data?.token) {
+        dispatch(setToken(response?.data?.token));
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
         dispatch(setStatus(STATUSES.ERROR));

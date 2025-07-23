@@ -31,6 +31,12 @@ const Card = ({ blog }) => {
             {blog.category}
           </span>
         </div>
+        {/* author */}
+        <div className="px-4 pb-4">
+          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+            {blog.userId?.username}
+          </span>
+        </div>
       </div>
     </Link>
   );

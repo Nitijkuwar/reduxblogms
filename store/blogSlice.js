@@ -33,8 +33,10 @@ export function addBlog(data) {
       });
       if (response.status === 201) {
         dispatch(setStatus(STATUSES.SUCCESS));
+        return true;
       } else {
         dispatch(setStatus(STATUSES.ERROR));
+        return false;
       }
     } catch (error) {
       dispatch(setStatus(STATUSES.ERROR));
@@ -62,16 +64,40 @@ export function fetchBlog(data) {
   };
 }
 
-//deleet
-export function deleteBlog(id, token) {
-  return async function deleteBlogThunk(dispatch) {
+//getSingleblog
+
+export function getSingleBlog(id) {
+  return async function (dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
       const response = await API.get(`blog/${id}`, {
         headers: {
-          token: token,
+          Authorization: localStorage.getItem("token"),
         },
       });
+      if (response.status === 200) {
+        dispatch(setBlog([response.data.data]));
+        dispatch(setStatus(STATUSES.SUCCESS));
+      } else {
+        dispatch(setStatus(STATUSES.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+//delete
+export function deleteBlog(id) {
+  return async function deleteBlogThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await API.delete(`blog/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+
       if (response.status === 200) {
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
@@ -79,6 +105,7 @@ export function deleteBlog(id, token) {
       }
     } catch (error) {
       dispatch(setStatus(STATUSES.ERROR));
+      console.error("Delete error:", error?.response || error);
     }
   };
 }
