@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../components/layout/Layout";
-import {
-  editBlog,
-  fetchBlog,
-  fetchSingleBlog,
-  setEditStatus,
-} from "../../../store/blogSlice";
+import { editBlog, fetchBlog, fetchSingleBlog } from "../../../store/blogSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditBlog = () => {
@@ -29,11 +24,11 @@ const EditBlog = () => {
     if (data) {
       const blogData = data?.[0];
       setBlog({
-        title: blogData?.title || "",
-        description: blogData?.description || "",
-        image: blogData?.image || "",
-        category: blogData?.category || "",
-        subtitle: blogData?.subtitle || "",
+        title: blogData?.title,
+        description: blogData?.description,
+        image: blogData?.image,
+        category: blogData?.category,
+        subtitle: blogData?.subtitle,
       });
     }
   }, [data]);
@@ -50,7 +45,7 @@ const EditBlog = () => {
   };
   useEffect(() => {
     if (editStatus === true) {
-      dispatch(setEditStatus(null));
+      // dispatch(setEditStatus(null));
       navigate("/");
     }
   }, [editStatus]);
