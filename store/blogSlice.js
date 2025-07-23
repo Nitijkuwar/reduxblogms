@@ -7,6 +7,7 @@ const blogSlice = createSlice({
   initialState: {
     data: null,
     status: null,
+    editStatus: null,
   },
   reducers: {
     setStatus(state, action) {
@@ -15,9 +16,12 @@ const blogSlice = createSlice({
     setBlog(state, action) {
       state.data = action.payload;
     },
+    setEditStatus(state, action) {
+      state.editStatus = action.payload;
+    },
   },
 });
-export const { setStatus, setBlog } = blogSlice.actions;
+export const { setStatus, setBlog, setEditStatus } = blogSlice.actions;
 export default blogSlice.reducer;
 
 //addblog
@@ -66,8 +70,8 @@ export function fetchBlog(data) {
 
 //getSingleblog
 
-export function getSingleBlog(id) {
-  return async function (dispatch) {
+export function fetchSingleBlog(id) {
+  return async function fetchSingleBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
       const response = await API.get(`blog/${id}`, {
@@ -106,6 +110,28 @@ export function deleteBlog(id) {
     } catch (error) {
       dispatch(setStatus(STATUSES.ERROR));
       console.error("Delete error:", error?.response || error);
+    }
+  };
+}
+
+//edit
+export function editBlog(blog, id) {
+  return async function editBlogThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await API.patch(`blog/${id}`, blog, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization ": localStorage.getItem("token"),
+        },
+      });
+      if (response.status === 200) {
+        dispatch(setEditStatus(true));
+      } else {
+        dispatch(setEditStatus(null));
+      }
+    } catch (error) {
+      dispatch(setStatus(STATUSES.ERROR));
     }
   };
 }

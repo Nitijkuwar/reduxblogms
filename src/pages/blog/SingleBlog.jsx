@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
-import { getSingleBlog, deleteBlog, fetchBlog } from "../../../store/blogSlice";
+import { deleteBlog, fetchSingleBlog } from "../../../store/blogSlice";
 import STATUSES from "../../globals/status/statuses";
 
 const SingleBlog = () => {
@@ -15,7 +15,7 @@ const SingleBlog = () => {
 
   // Fetch blog on mount
   useEffect(() => {
-    dispatch(getSingleBlog(id));
+    dispatch(fetchSingleBlog(id));
   }, [dispatch, id]);
 
   // Handle blog deletion
@@ -23,9 +23,6 @@ const SingleBlog = () => {
     const token = localStorage.getItem("token");
     dispatch(deleteBlog(id, token)).then(() => navigate("/"));
   };
-  useEffect(() => {
-    dispatch(fetchBlog());
-  }, [dispatch]);
 
   if (status === STATUSES.LOADING || !blog) {
     return (
