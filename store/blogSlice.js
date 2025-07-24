@@ -116,57 +116,22 @@ export function deleteBlog(id) {
 
 //edit
 export function editBlog(blog, id) {
-//   return async function editBlogThunk(dispatch) {
-//     dispatch(setStatus(STATUSES.LOADING));
-//     try {
-//       const response = await API.patch(`blog/${id}`, blog, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//           "Authorization": localStorage.getItem("token"),
-//         },
-//       });
-//       if (response.status === 200) {
-//         dispatch(setEditStatus(true));
-//       } else {
-//         dispatch(setEditStatus(null));
-//       }
-//     } catch (error) {
-//       dispatch(setStatus(STATUSES.ERROR));
-//     }
-//   };
-// }
-
-export function editBlog(blog, id) {
   return async function editBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
-      const formData = new FormData();
-      formData.append("title", blog.title);
-      formData.append("description", blog.description);
-      formData.append("subtitle", blog.subtitle);
-      formData.append("category", blog.category);
-
-      // If image is a File, append it; otherwise skip
-      if (blog.image instanceof File) {
-        formData.append("image", blog.image);
-      }
-
-      const response = await API.patch(`blog/${id}`, formData, {
+      const response = await API.patch(`blog/${id}`, blog, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
         },
       });
-
       if (response.status === 200) {
         dispatch(setEditStatus(true));
       } else {
         dispatch(setEditStatus(null));
       }
     } catch (error) {
-      console.error("Edit blog failed:", error.response?.data || error.message);
       dispatch(setStatus(STATUSES.ERROR));
     }
   };
 }
-

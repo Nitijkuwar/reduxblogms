@@ -1,163 +1,170 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
-import { editBlog, fetchBlog, fetchSingleBlog } from "../../../store/blogSlice";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  editBlog,
+  fetchSingleBlog,
+  setEditStatus,
+} from "../../../store/blogSlice";
 
 const EditBlog = () => {
-  const [blog, setBlog] = useState({
+  const [data, setData] = useState({
     title: "",
+    subtitle: "",
+    category: "",
     description: "",
     image: "",
-    category: "",
-    subtitle: "",
   });
-  const { id } = useParams();
 
-  const dispatch = useDispatch();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { data, editStatus } = useSelector((state) => state.blog);
+  const dispatch = useDispatch();
+
+  const { data: blogData, editStatus } = useSelector((store) => store.blog);
+  const blog = blogData?.[0]; // Assuming blog is in an array
+
+  // Fetch blog by ID when component mounts
   useEffect(() => {
     dispatch(fetchSingleBlog(id));
-  }, [id]);
+  }, [dispatch, id]);
+
+  // When blog data is available, populate form
   useEffect(() => {
-    if (data) {
-      const blogData = data?.[0];
-      setBlog({
-        title: blogData?.title,
-        description: blogData?.description,
-        image: blogData?.image,
-        category: blogData?.category,
-        subtitle: blogData?.subtitle,
+    if (blog) {
+      setData({
+        title: blog.title || "",
+        subtitle: blog.subtitle || "",
+        category: blog.category || "",
+        description: blog.description || "",
+        image: "", // Leave image blank; use file input only when changed
       });
     }
-  }, [data]);
+  }, [blog]);
+
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setBlog({
-      ...blog,
+    setData({
+      ...data,
       [name]: name === "image" ? e.target.files[0] : value,
     });
   };
-  const handleEditSubmit = (e) => {
+
+  // Submit edit
+  const handleEditBlog = (e) => {
     e.preventDefault();
-    dispatch(editBlog(blog, id));
+    dispatch(editBlog(data, id));
   };
+
+  // Redirect
   useEffect(() => {
     if (editStatus === true) {
       // dispatch(setEditStatus(null));
-      navigate("/");
+      navigate("/"); // redirect to homepage
     }
-  }, [editStatus]);
-
-  //fetch blog
-  useEffect(() => {
-    dispatch(fetchBlog());
-  }, [dispatch]);
+  }, [editStatus, dispatch, navigate]);
 
   return (
-    <>
-      <Layout>
-        <form onSubmit={handleEditSubmit}>
-          <div className="max-w-2xl mx-auto p-4 bg-[#f2f2f2]">
-            <h2 className="text-center text-4xl mt-5 font-bold">Edit Blog</h2>{" "}
-            <br />
-            <div className="mb-6">
-              <label
-                htmlFor="title"
-                className="block text-lg font-medium text-gray-800 mb-1"
-              >
-                Title
-              </label>
-              <input
-                value={blog?.title}
-                type="text"
-                id="title"
-                name="title"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="subtitle"
-                className="block text-lg font-medium text-gray-800 mb-1"
-              >
-                Subtitle
-              </label>
-              <input
-                value={blog?.subtitle}
-                type="text"
-                id="subtitle"
-                name="subtitle"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="category"
-                className="block text-lg font-medium text-gray-800 mb-1"
-              >
-                Category
-              </label>
-              <input
-                type="text"
-                value={blog?.category}
-                id="category"
-                name="category"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="description"
-                className="block text-lg font-medium text-gray-800 mb-1"
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                value={blog?.description}
-                name="description"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                rows="6"
-                onChange={handleChange}
-                required
-              ></textarea>
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="image"
-                className="block text-lg font-medium text-gray-800 mb-1"
-              >
-                Image
-              </label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 focus:outline-none"
-              >
-                Submit
-              </button>
-            </div>
+    <Layout>
+      <form onSubmit={handleEditBlog}>
+        <div className="max-w-2xl mx-auto p-4 bg-[#f2f2f2]">
+          <h2 className="text-center text-4xl mt-5 font-bold">Edit Blog</h2>
+          <br />
+          <div className="mb-6">
+            <label htmlFor="title" className="block mb-1 text-lg font-medium">
+              Title
+            </label>
+            <input
+              value={data.title}
+              type="text"
+              id="title"
+              name="title"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              required
+            />
           </div>
-        </form>
-      </Layout>
-    </>
+
+          <div className="mb-6">
+            <label
+              htmlFor="subtitle"
+              className="block mb-1 text-lg font-medium"
+            >
+              Subtitle
+            </label>
+            <input
+              value={data.subtitle}
+              type="text"
+              id="subtitle"
+              name="subtitle"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="category"
+              className="block mb-1 text-lg font-medium"
+            >
+              Category
+            </label>
+            <input
+              value={data.category}
+              type="text"
+              id="category"
+              name="category"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="description"
+              className="block mb-1 text-lg font-medium"
+            >
+              Description
+            </label>
+            <textarea
+              value={data.description}
+              id="description"
+              name="description"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded"
+              rows="6"
+              required
+            ></textarea>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="image" className="block mb-1 text-lg font-medium">
+              Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              onChange={handleChange}
+              className="w-full"
+              accept="image/*"
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </Layout>
   );
 };
 

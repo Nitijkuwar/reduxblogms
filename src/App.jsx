@@ -8,6 +8,7 @@ import EditBlog from "./pages/blog/EditBlog";
 import SingleBlog from "./pages/blog/SingleBlog";
 import { Provider } from "react-redux";
 import store from "../store/store";
+import Protected from "./Protected";
 function App() {
   return (
     <Provider store={store}>
@@ -16,9 +17,30 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/blog/add" element={<AddBlog />} />
-          <Route path="/blog/edit/:id" element={<EditBlog />} />
-          <Route path="/blog/:id" element={<SingleBlog />} />
+          <Route
+            path="/blog/add"
+            element={
+              <Protected>
+                <AddBlog />{" "}
+              </Protected>
+            }
+          />
+          <Route
+            path="/blog/edit/:id"
+            element={
+              <Protected>
+                <EditBlog />{" "}
+              </Protected>
+            }
+          />
+          <Route
+            path="/blog/:id"
+            element={
+              <Protected>
+                <SingleBlog />
+              </Protected>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </Provider>
