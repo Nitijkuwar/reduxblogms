@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import { deleteBlog, fetchSingleBlog } from "../../../store/blogSlice";
 import STATUSES from "../../globals/status/statuses";
+import Spinner from "../../Spinner";
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const SingleBlog = () => {
   if (status === STATUSES.LOADING || !blog) {
     return (
       <Layout>
-        <div className="text-center py-20 text-gray-500">Loading blog...</div>
+        <Spinner />
       </Layout>
     );
   }

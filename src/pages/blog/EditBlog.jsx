@@ -7,8 +7,17 @@ import {
   fetchSingleBlog,
   setEditStatus,
 } from "../../../store/blogSlice";
+import Spinner from "../../Spinner";
 
 const EditBlog = () => {
+  //loading
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // simulate API call
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
   const [data, setData] = useState({
     title: "",
     subtitle: "",
@@ -67,103 +76,107 @@ const EditBlog = () => {
 
   return (
     <Layout>
-      <form onSubmit={handleEditBlog}>
-        <div className="max-w-2xl mx-auto p-4 bg-[#f2f2f2]">
-          <h2 className="text-center text-4xl mt-5 font-bold">Edit Blog</h2>
-          <br />
-          <div className="mb-6">
-            <label htmlFor="title" className="block mb-1 text-lg font-medium">
-              Title
-            </label>
-            <input
-              value={data.title}
-              type="text"
-              id="title"
-              name="title"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={handleEditBlog}>
+          <div className="max-w-2xl mx-auto p-4 bg-[#f2f2f2]">
+            <h2 className="text-center text-4xl mt-5 font-bold">Edit Blog</h2>
+            <br />
+            <div className="mb-6">
+              <label htmlFor="title" className="block mb-1 text-lg font-medium">
+                Title
+              </label>
+              <input
+                value={data.title}
+                type="text"
+                id="title"
+                name="title"
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                required
+              />
+            </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="subtitle"
-              className="block mb-1 text-lg font-medium"
-            >
-              Subtitle
-            </label>
-            <input
-              value={data.subtitle}
-              type="text"
-              id="subtitle"
-              name="subtitle"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
+            <div className="mb-6">
+              <label
+                htmlFor="subtitle"
+                className="block mb-1 text-lg font-medium"
+              >
+                Subtitle
+              </label>
+              <input
+                value={data.subtitle}
+                type="text"
+                id="subtitle"
+                name="subtitle"
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                required
+              />
+            </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="category"
-              className="block mb-1 text-lg font-medium"
-            >
-              Category
-            </label>
-            <input
-              value={data.category}
-              type="text"
-              id="category"
-              name="category"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
+            <div className="mb-6">
+              <label
+                htmlFor="category"
+                className="block mb-1 text-lg font-medium"
+              >
+                Category
+              </label>
+              <input
+                value={data.category}
+                type="text"
+                id="category"
+                name="category"
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                required
+              />
+            </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="description"
-              className="block mb-1 text-lg font-medium"
-            >
-              Description
-            </label>
-            <textarea
-              value={data.description}
-              id="description"
-              name="description"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              rows="6"
-              required
-            ></textarea>
-          </div>
+            <div className="mb-6">
+              <label
+                htmlFor="description"
+                className="block mb-1 text-lg font-medium"
+              >
+                Description
+              </label>
+              <textarea
+                value={data.description}
+                id="description"
+                name="description"
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                rows="6"
+                required
+              ></textarea>
+            </div>
 
-          <div className="mb-6">
-            <label htmlFor="image" className="block mb-1 text-lg font-medium">
-              Image
-            </label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              onChange={handleChange}
-              className="w-full"
-              accept="image/*"
-            />
-          </div>
+            <div className="mb-6">
+              <label htmlFor="image" className="block mb-1 text-lg font-medium">
+                Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                onChange={handleChange}
+                className="w-full"
+                accept="image/*"
+              />
+            </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600"
-            >
-              Submit
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="px-6 py-2 bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600"
+              >
+                Submit
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
     </Layout>
   );
 };
