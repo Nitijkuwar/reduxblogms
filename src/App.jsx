@@ -12,7 +12,6 @@ const AddBlog = lazy(() => import("./pages/blog/AddBlog"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const Register = lazy(() => import("./pages/auth/Register"));
 const Home = lazy(() => import("./pages/blog/Home"));
-
 function ErrorFallBackBoundary({ error }) {
   return (
     <div>
@@ -51,6 +50,7 @@ function App() {
               path="/blog/:id"
               element={
                 <Protected>
+                  4
                   <SingleBlog />
                 </Protected>
               }

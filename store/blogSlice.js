@@ -32,7 +32,7 @@ export function addBlog(data) {
       const response = await API.post("blog", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("jwt"),
         },
       });
       if (response.status === 201) {
@@ -109,7 +109,6 @@ export function deleteBlog(id) {
       }
     } catch (error) {
       dispatch(setStatus(STATUSES.ERROR));
-      console.error("Delete error:", error?.response || error);
     }
   };
 }
@@ -125,7 +124,10 @@ export function editBlog(blog, id) {
           Authorization: localStorage.getItem("token"),
         },
       });
+
       if (response.status === 200) {
+        console.log("Token:", localStorage.getItem("token"));
+
         dispatch(setEditStatus(true));
       } else {
         dispatch(setEditStatus(null));
