@@ -13,7 +13,7 @@ const blogSlice = createSlice({
     setStatus(state, action) {
       state.status = action.payload;
     },
-    setBlog(state, action) {
+    setData(state, action) {
       state.data = action.payload;
     },
     setEditStatus(state, action) {
@@ -21,7 +21,7 @@ const blogSlice = createSlice({
     },
   },
 });
-export const { setStatus, setBlog, setEditStatus } = blogSlice.actions;
+export const { setStatus, setData, setEditStatus } = blogSlice.actions;
 export default blogSlice.reducer;
 
 //addblog
@@ -56,7 +56,7 @@ export function fetchBlog(data) {
     try {
       const response = await API.get("blog", data);
       if (response.status === 200 && response.data.data?.length > 0) {
-        dispatch(setBlog(response.data.data));
+        dispatch(setData(response?.data?.data));
 
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
@@ -76,11 +76,11 @@ export function fetchSingleBlog(id) {
     try {
       const response = await API.get(`blog/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("jwt"),
         },
       });
       if (response.status === 200) {
-        dispatch(setBlog([response.data.data]));
+        dispatch(setData([response.data.data]));
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
         dispatch(setStatus(STATUSES.ERROR));
@@ -92,16 +92,16 @@ export function fetchSingleBlog(id) {
 }
 
 //delete
+
 export function deleteBlog(id) {
   return async function deleteBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
       const response = await API.delete(`blog/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("jwt"),
         },
       });
-
       if (response.status === 200) {
         dispatch(setStatus(STATUSES.SUCCESS));
       } else {
@@ -114,20 +114,18 @@ export function deleteBlog(id) {
 }
 
 //edit
-export function editBlog(blog, id) {
+export function editBlog(blogData, id) {
   return async function editBlogThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
-      const response = await API.patch(`blog/${id}`, blog, {
+      const response = await API.patch(`blog/${id}`, blogData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("jwt"),
         },
       });
 
       if (response.status === 200) {
-        console.log("Token:", localStorage.getItem("token"));
-
         dispatch(setEditStatus(true));
       } else {
         dispatch(setEditStatus(null));

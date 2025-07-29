@@ -50,7 +50,6 @@ function App() {
               path="/blog/:id"
               element={
                 <Protected>
-                  4
                   <SingleBlog />
                 </Protected>
               }

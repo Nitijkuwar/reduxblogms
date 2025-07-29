@@ -40,14 +40,12 @@ export function register(data) {
       dispatch(setStatus(STATUSES.ERROR));
     }
   };
-  v;
 }
 //login
 export function login(data) {
   return async function loginThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
-      console.log(data);
       const response = await API.post("login", data);
       if (response.status === 200 && response?.data?.token) {
         dispatch(setToken(response?.data?.token));
