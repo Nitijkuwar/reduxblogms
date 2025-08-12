@@ -8,28 +8,42 @@ import Spinner from "./../../Spinner";
 const Home = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.blog);
+  const searchQuery = useSelector((state) => state.search.query);
 
+  // Fetch blogs
   useEffect(() => {
     dispatch(fetchBlog());
   }, [dispatch]);
 
-  //loading
+  // Local loading state
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // simulate API call
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Filter blogs by title or author
+  const filteredBlogs = data?.filter((blog) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      blog.title.toLowerCase().includes(query) ||
+      blog.userId?.username?.toLowerCase().includes(query)
+    );
+  });
   return (
     <Layout>
       {loading ? (
         <Spinner />
-      ) : (
-        <div className="flex flex-wrap justify-center my-10">
-          {data?.length > 0 &&
-            data.map((blog, index) => <Card blog={blog} key={index} />)}
+      ) : filteredBlogs?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {filteredBlogs.map((blog) => (
+            <Card blog={blog} key={blog._id || blog.id} />
+          ))}
         </div>
+      ) : (
+        <p className="text-gray-500 text-xl text-center mt-10">
+          No blogs found.
+        </p>
       )}
     </Layout>
   );
